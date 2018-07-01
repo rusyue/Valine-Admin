@@ -46,13 +46,21 @@ app.use('/comments', require('./routes/comments'));
 
 // 处理登录请求（可能来自登录界面中的表单）
 app.post('/login', function(req, res) {
-    AV.User.logIn(req.body.username, req.body.password).then(function(user) {
+    if (req.body.username == process.env.SMTP_USER 
+        || req.body.username == process.env.TO_EMAIL) {
+
+      AV.User.logIn(req.body.username, req.body.password).then(function(user) {
         res.saveCurrentUser(user); // 保存当前用户到 Cookie
         res.redirect('/comments'); // 跳转到个人资料页面
-    }, function(error) {
-        //登录失败，跳转到登录页面
-        res.redirect('/');
-    });
+      }, function(error) {
+          //登录失败，跳转到登录页面
+          res.redirect('/');
+      });
+
+    } else {
+      res.redirect('/');
+    }
+    
 });
 
 // 登出账号
