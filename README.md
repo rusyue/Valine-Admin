@@ -58,7 +58,9 @@
 
 ## 更新历史
 
-* 7.7 兼容 `valine v1.2.0-beta ` 版本对 at 的更改 [点击查看](https://valine.js.org/changelog.html#v1-2-0-beta-2018-06-30)。
+* 7.30 修复 @ 邮件通知出错 bug (需 [Valine 1.3.0](https://valine.js.org/changelog.html#v1-3-0-2018-07-29) 支持)，优化发件逻辑，站长发的评论不再收到邮件通知。
+
+* 7.7 兼容 `valine v1.2.0-beta ` 版本对 at 的更改 [点击查看](https://valine.js.org/changelog.html#v1-2-0-beta-2018-06-30)
 * 7.1 修复 `Web` 后台登录安全 `bug`
 * 6.14 添加自定义邮件服务器功能. [点击查看](/高级配置.md#自定义邮件服务器)
 
