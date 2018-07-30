@@ -23,8 +23,17 @@ const transporter = nodemailer.createTransport(config);
 let templateName = process.env.TEMPLATE_NAME ?  process.env.TEMPLATE_NAME : "default";
 let noticeTemplate = ejs.compile(fs.readFileSync(path.resolve(process.cwd(), 'template', templateName, 'notice.ejs'), 'utf8'));
 let sendTemplate = ejs.compile(fs.readFileSync(path.resolve(process.cwd(), 'template', templateName, 'send.ejs'), 'utf8'));
+
+
 // 提醒站长
 exports.notice = (comment) => {
+
+    // 站长自己发的评论不需要通知
+    if (comment.get('mail') === process.env.TO_EMAIL 
+        || comment.get('mail') === process.env.SMTP_USER) {
+        return;
+    }
+
     let emailSubject = '👉 咚！「' + process.env.SITE_NAME + '」上有新评论了';
     let emailContent =  noticeTemplate({
                             siteName: process.env.SITE_NAME,
@@ -48,8 +57,12 @@ exports.notice = (comment) => {
         console.log("收到一条评论, 已提醒站长");
     });
 }
+
+
+
 // 发送邮件通知他人
 exports.send = (currentComment, parentComment)=> {
+
     // 站长被 @ 不需要提醒
     if (parentComment.get('mail') === process.env.TO_EMAIL 
         || parentComment.get('mail') === process.env.SMTP_USER) {
@@ -63,7 +76,7 @@ exports.send = (currentComment, parentComment)=> {
                             ptext: parentComment.get('comment'),
                             name: currentComment.get('nick'),
                             text: currentComment.get('comment'),
-                            url: process.env.SITE_URL + currentComment.get('url')
+                            url: process.env.SITE_URL + currentComment.get('url') + "#" + currentComment.get('pid')
                         });
     let mailOptions = {
         from: '"' + process.env.SENDER_NAME + '" <' + process.env.SMTP_USER + '>',

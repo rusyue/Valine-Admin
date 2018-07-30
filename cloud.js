@@ -7,17 +7,20 @@ AV.Cloud.afterSave('Comment', function (request) {
     mail.notice(currentComment);
     
     // AT评论通知
-    let rid =currentComment.get('rid');
+    let pid =currentComment.get('pid');
 
-    if (!rid) {
+    console.log(pid);
+
+    if (!pid) {
         console.log("这条评论没有 @ 任何人");
         return;
     }
 
     // 通过被 @ 的评论 id, 则找到这条评论留下的邮箱并发送通知.
     let query = new AV.Query('Comment');
-    query.get(rid).then(function (parentComment) {
+    query.get(pid).then(function (parentComment) {
         if (parentComment.get('mail')) {
+            console.log(parentComment.get('mail'));
             mail.send(currentComment, parentComment);
         } else {
             console.log(currentComment.get('nick') + " @ 了" + parentComment.get('nick') + ", 但被 @ 的人没留邮箱... 无法通知");

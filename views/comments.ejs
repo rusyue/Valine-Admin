@@ -27,7 +27,7 @@
                 <%- comment_list[i].get('comment') %>
             </div>
             <div class="check">
-                <a class="red" href="/comments/delete?id=<%= comment_list[i].get('objectId') %>" rel="nofollow">删除</a><span class="spacer">•</span>
+                <a class="red" href="javascript:if(confirm('确认要删除吗?'))location='/comments/delete?id=<%= comment_list[i].get('objectId') %>'" rel="nofollow">删除</a><span class="spacer">•</span>
             </div>
         </li>
         <% } %>
