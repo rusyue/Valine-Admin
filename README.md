@@ -37,7 +37,7 @@
 * `SITE_URL` : 网站地址, **最后不要加 `/` 。**
 * `SMTP_USER` : SMTP 服务用户名，一般为邮箱地址。
 * `SMTP_PASS` : SMTP 密码，一般为授权码，而不是邮箱的登陆密码，请自行查询对应邮件服务商的获取方式
-* `SMTP_SERVICE` : 邮件服务提供商，支持 `QQ`、`163`、`126`、`Gmail`、`"Yahoo"`、`......`  ，全部支持请参考 : [Nodemailer Supported services](https://nodemailer.com/smtp/well-known/#supported-services)。
+* `SMTP_SERVICE` : 邮件服务提供商，支持 `QQ`、`163`、`126`、`Gmail`、`"Yahoo"`、`......`  ，全部支持请参考 : [Nodemailer Supported services](https://nodemailer.com/smtp/well-known/#supported-services)。 --- *如这里没有你使用的邮件提供商，请查看下方高级配置中的自定义邮件服务器*
 * `SENDER_NAME` : 寄件人名称。
 
 
