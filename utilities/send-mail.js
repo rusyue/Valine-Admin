@@ -29,7 +29,7 @@ let sendTemplate = ejs.compile(fs.readFileSync(path.resolve(process.cwd(), 'temp
 exports.notice = (comment) => {
 
     // 站长自己发的评论不需要通知
-    if (comment.get('mail') === process.env.TO_EMAIL 
+    if (comment.get('mail') === process.env.TO_EMAIL
         || comment.get('mail') === process.env.SMTP_USER) {
         return;
     }
@@ -64,7 +64,7 @@ exports.notice = (comment) => {
 exports.send = (currentComment, parentComment)=> {
 
     // 站长被 @ 不需要提醒
-    if (parentComment.get('mail') === process.env.TO_EMAIL 
+    if (parentComment.get('mail') === process.env.TO_EMAIL
         || parentComment.get('mail') === process.env.SMTP_USER) {
         return;
     }
@@ -90,6 +90,9 @@ exports.send = (currentComment, parentComment)=> {
             return console.log(error);
         }
         console.log(currentComment.get('nick') + " @了" + parentComment.get('nick') + ", 已通知.");
+
+        currentComment.set('isNotified', true);
+        currentComment.save();
     });
 };
 
@@ -101,5 +104,5 @@ exports.verify = function(){
             console.log(error);
         }
         console.log("Server is ready to take our messages");
-    });    
+    });
 };

@@ -2,6 +2,8 @@
 const router = require('express').Router();
 const AV = require('leanengine');
 const Comment = AV.Object.extend('Comment');
+const mail = require('../utilities/send-mail');
+
 
 // Comment 列表
 router.get('/', function (req, res, next) {
@@ -40,6 +42,23 @@ router.get('/delete', function (req, res, next) {
             res.redirect('/comments')
         }, function (err) {
         }).catch(next);
+    } else {
+        res.redirect('/');
+    }
+});
+
+router.get('/resend-email', function (req, res, next) {
+    if (req.currentUser) {
+    let query = new AV.Query(Comment);
+    query.get(req.query.id).then(function (object) {
+        query.get(object.get('pid')).then(function (parent) {
+                mail.send(object, parent);
+                res.redirect('/comments')
+            }, function (err) {
+            }
+        ).catch(next);
+    }, function (err) {
+    }).catch(next);
     } else {
         res.redirect('/');
     }
