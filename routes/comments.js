@@ -53,12 +53,8 @@ router.get('/resend-email', function (req, res, next) {
     query.get(req.query.id).then(function (object) {
         query.get(object.get('pid')).then(function (parent) {
                 mail.send(object, parent)
-                    .then(function(results) {
-                        res.redirect('./comments');
-                    })
-                    .catch(function(error) {
-                        console.log(error);
-                    });
+                    .then(results => res.redirect('/comments'))
+                    .catch(error => console.log(error));
             }, function (err) {
             }
         ).catch(next);
