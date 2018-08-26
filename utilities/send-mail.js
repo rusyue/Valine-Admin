@@ -88,6 +88,7 @@ exports.send = (currentComment, parentComment)=> {
 
         transporter.sendMail(mailOptions, (error, info) => {
             if (error) {
+                console.log(error);
                 return reject(error);
             }
             console.log(currentComment.get('nick') + " @了" + parentComment.get('nick') + ", 已通知.");
