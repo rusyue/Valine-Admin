@@ -34,7 +34,7 @@ exports.notice = (comment) => {
         return;
     }
 
-    let emailSubject = '❤ 咚！「' + process.env.SITE_NAME + '」上有新评论了';
+    let emailSubject = '❤️咚！「' + process.env.SITE_NAME + '」上有新评论了';
     let emailContent =  noticeTemplate({
                             siteName: process.env.SITE_NAME,
                             siteUrl: process.env.SITE_URL,
@@ -69,7 +69,7 @@ exports.send = (currentComment, parentComment)=> {
     }
 
     return new Promise(function(resolve, reject) {
-        let emailSubject = '❤ 叮咚！「' + process.env.SITE_NAME + '」上有人@了你';
+        let emailSubject = '❤️叮咚！「' + process.env.SITE_NAME + '」上有人@了你';
         let emailContent = sendTemplate({
                                 siteName: process.env.SITE_NAME,
                                 siteUrl: process.env.SITE_URL,
