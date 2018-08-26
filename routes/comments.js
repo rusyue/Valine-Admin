@@ -52,8 +52,13 @@ router.get('/resend-email', function (req, res, next) {
     let query = new AV.Query(Comment);
     query.get(req.query.id).then(function (object) {
         query.get(object.get('pid')).then(function (parent) {
-                mail.send(object, parent);
-                res.redirect('/comments')
+                mail.send(object, parent)
+                    .then(function(results) {
+                        res.redirect('/comments');
+                    })
+                    .catch(function(error) {
+                        console.log(error);
+                    });
             }, function (err) {
             }
         ).catch(next);

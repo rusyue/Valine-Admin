@@ -34,7 +34,7 @@ exports.notice = (comment) => {
         return;
     }
 
-    let emailSubject = '👉 咚！「' + process.env.SITE_NAME + '」上有新评论了';
+    let emailSubject = '❤ 咚！「' + process.env.SITE_NAME + '」上有新评论了';
     let emailContent =  noticeTemplate({
                             siteName: process.env.SITE_NAME,
                             siteUrl: process.env.SITE_URL,
@@ -62,37 +62,40 @@ exports.notice = (comment) => {
 
 // 发送邮件通知他人
 exports.send = (currentComment, parentComment)=> {
-
     // 站长被 @ 不需要提醒
     if (parentComment.get('mail') === process.env.TO_EMAIL
         || parentComment.get('mail') === process.env.SMTP_USER) {
         return;
     }
-    let emailSubject = '👉 叮咚！「' + process.env.SITE_NAME + '」上有人@了你';
-    let emailContent = sendTemplate({
-                            siteName: process.env.SITE_NAME,
-                            siteUrl: process.env.SITE_URL,
-                            pname: parentComment.get('nick'),
-                            ptext: parentComment.get('comment'),
-                            name: currentComment.get('nick'),
-                            text: currentComment.get('comment'),
-                            url: process.env.SITE_URL + currentComment.get('url') + "#" + currentComment.get('pid')
-                        });
-    let mailOptions = {
-        from: '"' + process.env.SENDER_NAME + '" <' + process.env.SMTP_USER + '>',
-        to: parentComment.get('mail'),
-        subject: emailSubject,
-        html: emailContent
-    };
 
-    transporter.sendMail(mailOptions, (error, info) => {
-        if (error) {
-            return console.log(error);
-        }
-        console.log(currentComment.get('nick') + " @了" + parentComment.get('nick') + ", 已通知.");
+    return new Promise(function(resolve, reject) {
+        let emailSubject = '❤ 叮咚！「' + process.env.SITE_NAME + '」上有人@了你';
+        let emailContent = sendTemplate({
+                                siteName: process.env.SITE_NAME,
+                                siteUrl: process.env.SITE_URL,
+                                pname: parentComment.get('nick'),
+                                ptext: parentComment.get('comment'),
+                                name: currentComment.get('nick'),
+                                text: currentComment.get('comment'),
+                                url: process.env.SITE_URL + currentComment.get('url') + "#" + currentComment.get('pid')
+                            });
+        let mailOptions = {
+            from: '"' + process.env.SENDER_NAME + '" <' + process.env.SMTP_USER + '>',
+            to: parentComment.get('mail'),
+            subject: emailSubject,
+            html: emailContent
+        };
 
-        currentComment.set('isNotified', true);
-        currentComment.save();
+        transporter.sendMail(mailOptions, (error, info) => {
+            if (error) {
+                return reject(error);
+            }
+            console.log(currentComment.get('nick') + " @了" + parentComment.get('nick') + ", 已通知.");
+
+            currentComment.set('isNotified', true);
+            currentComment.save();
+            return resolve('send successfully');
+        });
     });
 };
 
